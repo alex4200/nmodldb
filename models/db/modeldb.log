@@ -1,0 +1,64 @@
+2021-06-16 11:22:42,821 :: INFO     :: Initialized -> logfile: ./models/db/modeldb.log
+2021-06-16 11:22:42,821 :: INFO     :: Master directory is: ./models/db/modeldb
+2021-06-16 11:22:42,821 :: INFO     :: 		-> number of folders: 1679
+2021-06-16 11:22:42,821 :: INFO     :: Checking mod dirs ...
+2021-06-16 11:36:03,431 :: INFO     :: Initialized -> logfile: ./models/db/modeldb.log
+2021-06-16 11:36:03,432 :: INFO     :: Master directory is: ./models/db/modeldb
+2021-06-16 11:36:03,432 :: INFO     :: 		-> number of folders: 1679
+2021-06-16 11:36:03,432 :: INFO     :: Checking mod dirs ...
+2021-06-16 11:38:40,560 :: INFO     :: Initialized -> logfile: ./models/db/modeldb.log
+2021-06-16 11:38:40,560 :: INFO     :: Master directory is: ./models/db/modeldb
+2021-06-16 11:38:40,561 :: INFO     :: 		-> number of folders: 1679
+2021-06-16 11:38:40,561 :: INFO     :: Checking mod dirs ...
+2021-06-16 11:38:40,693 :: DEBUG    :: Done for: ./models/db/modeldb/261873/mod/
+2021-06-16 11:38:40,694 :: DEBUG    :: Done for: ./models/db/modeldb/266864/mod/
+2021-06-16 11:38:40,695 :: DEBUG    :: Done for: ./models/db/modeldb/263718/mod/
+2021-06-16 11:38:40,696 :: DEBUG    :: Done for: ./models/db/modeldb/118894/mod/
+2021-06-16 11:38:40,704 :: DEBUG    :: Done for: ./models/db/modeldb/247310/mod/
+2021-06-16 11:38:40,716 :: DEBUG    :: Done for: ./models/db/modeldb/246004/mod/
+2021-06-16 11:38:40,727 :: DEBUG    :: Done for: ./models/db/modeldb/21984/mod/
+2021-06-16 11:38:40,730 :: DEBUG    :: Done for: ./models/db/modeldb/93315/mod/
+2021-06-16 11:38:40,732 :: DEBUG    :: Done for: ./models/db/modeldb/266609/mod/
+2021-06-16 11:38:40,735 :: DEBUG    :: Done for: ./models/db/modeldb/114450/mod/
+2021-06-16 11:38:40,738 :: DEBUG    :: Done for: ./models/db/modeldb/125125/mod/
+2021-06-16 11:38:40,741 :: DEBUG    :: Done for: ./models/db/modeldb/266863/mod/
+2021-06-16 11:38:40,745 :: DEBUG    :: Done for: ./models/db/modeldb/143753/mod/
+2021-06-16 11:38:40,748 :: DEBUG    :: Done for: ./models/db/modeldb/83517/mod/
+2021-06-16 11:38:45,540 :: DEBUG    :: Done for: ./models/db/modeldb/7399/mod/
+2021-06-16 11:38:45,545 :: DEBUG    :: Done for: ./models/db/modeldb/117810/mod/
+2021-06-16 11:38:45,550 :: DEBUG    :: Done for: ./models/db/modeldb/141699/mod/
+2021-06-16 11:38:45,555 :: DEBUG    :: Done for: ./models/db/modeldb/245818/mod/
+2021-06-16 11:38:45,560 :: DEBUG    :: Done for: ./models/db/modeldb/195626/mod/
+2021-06-16 11:38:45,564 :: DEBUG    :: Done for: ./models/db/modeldb/83528/mod/
+2021-06-16 11:38:46,173 :: DEBUG    :: Done for: ./models/db/modeldb/144549/mod/
+2021-06-16 11:38:46,176 :: DEBUG    :: Done for: ./models/db/modeldb/79238/mod/
+2021-06-16 11:38:46,179 :: DEBUG    :: Done for: ./models/db/modeldb/266636/mod/
+2021-06-16 11:38:46,182 :: DEBUG    :: Done for: ./models/db/modeldb/153355/mod/
+2021-06-16 11:59:55,337 :: INFO     :: Initialized -> logfile: ./models/db/modeldb.log
+2021-06-16 11:59:55,338 :: INFO     :: Master directory is: ./models/db/modeldb
+2021-06-16 11:59:55,338 :: INFO     :: 		-> number of folders: 1679
+2021-06-16 11:59:55,338 :: INFO     :: Checking mod dirs ...
+2021-06-16 11:59:55,530 :: DEBUG    :: Done for: ./models/db/modeldb/261873/mod/
+2021-06-16 11:59:55,531 :: DEBUG    :: Done for: ./models/db/modeldb/263718/mod/
+2021-06-16 11:59:55,534 :: DEBUG    :: Done for: ./models/db/modeldb/266864/mod/
+2021-06-16 11:59:55,537 :: DEBUG    :: Done for: ./models/db/modeldb/118894/mod/
+2021-06-16 11:59:55,554 :: DEBUG    :: Done for: ./models/db/modeldb/247310/mod/
+2021-06-16 11:59:55,561 :: DEBUG    :: Done for: ./models/db/modeldb/246004/mod/
+2021-06-16 11:59:55,613 :: DEBUG    :: Done for: ./models/db/modeldb/21984/mod/
+2021-06-16 11:59:55,665 :: DEBUG    :: Done for: ./models/db/modeldb/93315/mod/
+2021-06-16 11:59:55,671 :: DEBUG    :: Done for: ./models/db/modeldb/266609/mod/
+2021-06-16 11:59:55,678 :: DEBUG    :: Done for: ./models/db/modeldb/114450/mod/
+2021-06-16 11:59:55,683 :: DEBUG    :: Done for: ./models/db/modeldb/125125/mod/
+2021-06-16 11:59:55,689 :: DEBUG    :: Done for: ./models/db/modeldb/266863/mod/
+2021-06-16 11:59:55,694 :: DEBUG    :: Done for: ./models/db/modeldb/143753/mod/
+2021-06-16 11:59:55,700 :: DEBUG    :: Done for: ./models/db/modeldb/83517/mod/
+2021-06-16 12:00:00,506 :: DEBUG    :: Done for: ./models/db/modeldb/7399/mod/
+2021-06-16 12:00:00,509 :: DEBUG    :: Done for: ./models/db/modeldb/117810/mod/
+2021-06-16 12:00:00,514 :: DEBUG    :: Done for: ./models/db/modeldb/141699/mod/
+2021-06-16 12:00:00,519 :: DEBUG    :: Done for: ./models/db/modeldb/245818/mod/
+2021-06-16 12:00:00,524 :: DEBUG    :: Done for: ./models/db/modeldb/195626/mod/
+2021-06-16 12:00:00,530 :: DEBUG    :: Done for: ./models/db/modeldb/83528/mod/
+2021-06-16 12:00:01,437 :: DEBUG    :: Done for: ./models/db/modeldb/144549/mod/
+2021-06-16 12:00:01,442 :: DEBUG    :: Done for: ./models/db/modeldb/79238/mod/
+2021-06-16 12:00:01,447 :: DEBUG    :: Done for: ./models/db/modeldb/266636/mod/
+2021-06-16 12:00:01,452 :: DEBUG    :: Done for: ./models/db/modeldb/153355/mod/
