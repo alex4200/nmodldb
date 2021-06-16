@@ -4,5 +4,6 @@
 .tox
 *.pyc
 *.swp
+*.log
 .installed
 .idea
