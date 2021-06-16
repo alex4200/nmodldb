@@ -1,5 +1,4 @@
 class MechInfo:
-
     def __init__(self, name):
         self.name = name
         self.nlines = 0
@@ -7,25 +6,22 @@ class MechInfo:
 
 
 class ChannelInfo(MechInfo):
-
     def __init__(self, name):
         MechInfo.__init__(self, name)
         self.is_channel = True
 
 
 class SynapseInfo(MechInfo):
-
     def __init__(self, name):
         MechInfo.__init__(self, name)
         self.is_synapse = True
 
 
 class ModelInfo:
-
     def __init__(self, url):
         self.name = None
-        self.description = ''
-        self.citation = ''
+        self.description = ""
+        self.citation = ""
         self.neuron_model = False
         self.simulator = None
         self.url = url
@@ -38,7 +34,7 @@ class ModelInfo:
         self.cache_dir = None
         self.output_filename = None
 
-        self.mod_dir = '.'
+        self.mod_dir = "."
         self.mod_filter = None
 
         self.nmod = 0

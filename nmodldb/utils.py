@@ -24,15 +24,15 @@ def process_name():
 
 
 def write_yaml_report(models, report):
-    with open(report, 'w') as outfile:
+    with open(report, "w") as outfile:
         output = {}
-        output['models'] = models
+        output["models"] = models
         yaml.dump(output, outfile, default_flow_style=False)
 
 
 def is_subdir_in_dir(subdir, rootdir):
     # make both absolute
-    rootdir = os.path.join(os.path.realpath(rootdir), '')
+    rootdir = os.path.join(os.path.realpath(rootdir), "")
     subdir = os.path.realpath(subdir)
 
     # return true, if the common prefix of both is equal to rootdir
@@ -41,13 +41,12 @@ def is_subdir_in_dir(subdir, rootdir):
 
 
 def copy_mod_files(model, source, dest):
-
     def is_synapse(filename):
-        with open(filename, 'r') as f:
-            return True if 'POINT_PROCESS' in f.read() else False
+        with open(filename, "r") as f:
+            return True if "POINT_PROCESS" in f.read() else False
 
     def verbatim_count(filename):
-        with open(filename, 'r') as f:
+        with open(filename, "r") as f:
             return f.read().count("ENDVERBATIM")
 
     def line_count(filename):
@@ -59,7 +58,7 @@ def copy_mod_files(model, source, dest):
 
     for root, _, filenames in os.walk(source):
         for filename in filenames:
-            if filename.endswith(('.mod', '.inc')):
+            if filename.endswith((".mod", ".inc")):
                 srcfile = os.path.join(root, filename)
                 destfile = os.path.join(dest, filename)
                 shutil.copy(srcfile, destfile)
@@ -89,6 +88,7 @@ def copy_mod_files(model, source, dest):
     model.channels.sort(key=lambda x: x.name)
     model.synapses.sort(key=lambda x: x.name)
 
+
 def remove_dir(subdirectory, directory=None):
     if os.path.isdir(subdirectory):
         tid = process_name()
@@ -100,15 +100,14 @@ def remove_dir(subdirectory, directory=None):
 
 
 def get_bbp_models_info():
-
     def flatten_model(models, name, submodels):
-        modfiles = models[name]['mod']
+        modfiles = models[name]["mod"]
         for modelname in submodels:
             model = models[modelname]
-            includes = model['includes']
+            includes = model["includes"]
             files = flatten_model(models, modelname, includes)
             modfiles.extend(files)
-            model['includes'] = []
+            model["includes"] = []
         return modfiles
 
     file = open(BBP_MODEL_INFO_FILE, "r")
@@ -116,10 +115,10 @@ def get_bbp_models_info():
     result = {}
 
     for name, model in models.items():
-        if 'includes' in model:
-            submodels = model['includes']
+        if "includes" in model:
+            submodels = model["includes"]
             flatten_model(models, name, submodels)
-            if model['model']:
+            if model["model"]:
                 result[name] = model
 
     return result

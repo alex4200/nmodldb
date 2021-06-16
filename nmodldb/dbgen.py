@@ -22,8 +22,9 @@ from utils import *
 
 max_models_download_count = None
 
+
 def counter_init(args):
-    ''' store the counter for later use '''
+    """store the counter for later use"""
     global max_models_download_count
     max_models_download_count = args
 
@@ -34,21 +35,28 @@ def execute_with_workers(function, data, max_downloads, nstreams):
     original_sigint_handler = signal.signal(signal.SIGINT, signal.SIG_IGN)
     signal.signal(signal.SIGINT, original_sigint_handler)
 
-    max_models_download_count = Value('i', 0)
-    pool = Pool(nstreams, initializer = counter_init, initargs = (max_models_download_count,))
+    max_models_download_count = Value("i", 0)
+    pool = Pool(
+        nstreams, initializer=counter_init, initargs=(max_models_download_count,)
+    )
 
     try:
-        result = pool.map_async(function, data, chunksize = 1)
+        result = pool.map_async(function, data, chunksize=1)
         total_task = len(data)
-        while (True):
+        while True:
             remaining_task = result._number_left
-            logger.info('{0}/{1} processed, downloaded {2} !'.format(
-                remaining_task, total_task, max_models_download_count.value))
-            if (remaining_task == 0):
+            logger.info(
+                "{0}/{1} processed, downloaded {2} !".format(
+                    remaining_task, total_task, max_models_download_count.value
+                )
+            )
+            if remaining_task == 0:
                 logger.info("Done!")
                 break
-            if (max_models_download_count.value > max_downloads):
-                logger.exception('Maximum models download count {0} reached!'.format(max_downloads))
+            if max_models_download_count.value > max_downloads:
+                logger.exception(
+                    "Maximum models download count {0} reached!".format(max_downloads)
+                )
                 pool.terminate()
                 sys.exit(-1)
             time.sleep(2)
@@ -68,8 +76,10 @@ def download_zip(download, url, scratch_dir, filename):
     bars from different threads getting mixed, simply set
     callback outputing none."""
     if download:
+
         def progress_bar(current, total, width=80):
-            return ''
+            return ""
+
         logger.debug("%s downloading %s", process_name(), url)
         wget.download(url, filename, progress_bar)
         global max_models_download_count
@@ -122,15 +132,11 @@ def download_model(use_cache, keep_download, mod):
     models which are stored as zip or git repository.
     """
     tid = process_name()
-    mod_dir = "%s/%s" % (mod.output_dir, 'mod')
-    data_dir = "%s/%s" % (mod.cache_dir, 'data')
-    scratch_dir = "%s/%s" % (mod.cache_dir, 'scratch')
+    mod_dir = "%s/%s" % (mod.output_dir, "mod")
+    data_dir = "%s/%s" % (mod.cache_dir, "data")
+    scratch_dir = "%s/%s" % (mod.cache_dir, "scratch")
 
-    result = {
-        'status': 0,
-        'message': "",
-        'url': mod.url
-    }
+    result = {"status": 0, "message": "", "url": mod.url}
 
     try:
         if os.path.exists(data_dir) and use_cache:
@@ -144,17 +150,12 @@ def download_model(use_cache, keep_download, mod):
 
         if mod.is_zip:
             filename = mod.output_filename
-            status, message = download_zip(download,
-                                           mod.url,
-                                           scratch_dir,
-                                           filename)
+            status, message = download_zip(download, mod.url, scratch_dir, filename)
         elif mod.is_git:
             model_dir = "%s/%s" % (data_dir, mod.output_filename)
-            status, message = download_git(download,
-                                           mod.url,
-                                           mod.git_branch,
-                                           model_dir,
-                                           scratch_dir)
+            status, message = download_git(
+                download, mod.url, mod.git_branch, model_dir, scratch_dir
+            )
 
         copy_mod_files(mod, scratch_dir, mod_dir)
         remove_dir(scratch_dir, NMODLDB_CACHE_DIR)
@@ -168,8 +169,8 @@ def download_model(use_cache, keep_download, mod):
     if not keep_download:
         remove_dir(data_dir, NMODLDB_CACHE_DIR)
 
-    result['status'] = status
-    result['message'] = message
+    result["status"] = status
+    result["message"] = message
     mod.result = result
     return mod
 
@@ -182,18 +183,18 @@ def download_bluebrain_models(max_downloads, nstreams, reuserepo, keep_download)
     modelsinfo = get_bbp_models_info()
 
     for tag, modelinfo in modelsinfo.iteritems():
-        url = modelinfo['url']
-        branch = modelinfo['branch']
+        url = modelinfo["url"]
+        branch = modelinfo["branch"]
         mod = model.ModelInfo(url)
         mod.name = tag
         mod.is_git = True
-        mod.output_dir = '%s/bluebrain/%s' % (NMODLDB_ROOT_DIR, tag)
-        mod.cache_dir = '%s/bluebrain/%s' % (NMODLDB_CACHE_DIR, tag)
+        mod.output_dir = "%s/bluebrain/%s" % (NMODLDB_ROOT_DIR, tag)
+        mod.cache_dir = "%s/bluebrain/%s" % (NMODLDB_CACHE_DIR, tag)
         mod.output_filename = "repository"
         mod.git_branch = branch
         mod.neuron_model = True
         mod.group = "BlueBrain"
-        mod.simulator = 'NEURON'
+        mod.simulator = "NEURON"
         models.append(mod)
 
     func = partial(download_model, reuserepo, keep_download)
@@ -202,7 +203,9 @@ def download_bluebrain_models(max_downloads, nstreams, reuserepo, keep_download)
     return models
 
 
-def download_modeldb_models(nmodels, max_downloads, nstreams, syncmodeldb, reuserepo, keep_download):
+def download_modeldb_models(
+    nmodels, max_downloads, nstreams, syncmodeldb, reuserepo, keep_download
+):
     """Download zip files from ModelDB"""
     if syncmodeldb or (not os.path.isfile(MDB_YAML_DATA_FILE)):
         logger.info("Syncing models information from ModelDB")
@@ -222,11 +225,11 @@ def download_modeldb_models(nmodels, max_downloads, nstreams, syncmodeldb, reuse
 def extract_modeldb_models(response, nmodels=None):
     """Extract ModelDB models information from HTML file
 
-     ModelDB doesn't have REST api to query/download models.
-     From HTML response, we iterate and extract model id which
-     can be used to downloa zip file of model"""
+    ModelDB doesn't have REST api to query/download models.
+    From HTML response, we iterate and extract model id which
+    can be used to downloa zip file of model"""
     soup = BeautifulSoup(response, "html.parser")
-    records = soup.select('tr.searchTable')
+    records = soup.select("tr.searchTable")
 
     def get_element(x, i):
         if len(x) > i:
@@ -234,11 +237,11 @@ def extract_modeldb_models(response, nmodels=None):
         return None
 
     def get_citation(msg):
-        citation = msg[msg.find("(") + 1:msg.find(")")]
+        citation = msg[msg.find("(") + 1 : msg.find(")")]
         return citation
 
     def is_neuron_model(sim):
-        return True if 'neuron' in sim.lower() else False
+        return True if "neuron" in sim.lower() else False
 
     def download_url(model_id):
         return "%s?o=%s&a=23&mime=application/zip" % (MDB_DOWNLOAD_URL, model_id)
@@ -257,8 +260,8 @@ def extract_modeldb_models(response, nmodels=None):
         mod = model.ModelInfo(url)
         mod.name = modeldb_id
         mod.is_zip = True
-        mod.output_dir = '%s/modeldb/%s' % (NMODLDB_ROOT_DIR, modeldb_id)
-        mod.cache_dir = '%s/modeldb/%s' % (NMODLDB_CACHE_DIR, modeldb_id)
+        mod.output_dir = "%s/modeldb/%s" % (NMODLDB_ROOT_DIR, modeldb_id)
+        mod.cache_dir = "%s/modeldb/%s" % (NMODLDB_CACHE_DIR, modeldb_id)
         mod.output_filename = "%s/data/%s.zip" % (mod.cache_dir, modeldb_id)
         mod.description = description
         mod.citation = citation
@@ -274,19 +277,19 @@ def extract_modeldb_models(response, nmodels=None):
 def sync_modeldb_models():
     """Query ModelDB for all models andstore response as HTML file"""
     url = MDB_SEARCH_URL
-    url += '?ddl_class=19'
-    url += '&fd_oid=on'
-    url += '&fd_name=on'
-    url += '&fc_a25='
-    url += '&fd_a114=on'
-    url += '&fd_a299=on'
-    url += '&fulltextSearch='
-    url += '&btn_Search=Search'
+    url += "?ddl_class=19"
+    url += "&fd_oid=on"
+    url += "&fd_name=on"
+    url += "&fc_a25="
+    url += "&fd_a114=on"
+    url += "&fd_a299=on"
+    url += "&fulltextSearch="
+    url += "&btn_Search=Search"
 
     response = urllib.request.urlopen(url).read()
     models = extract_modeldb_models(response)
 
-    with open(MDB_YAML_DATA_FILE, 'w') as outfile:
+    with open(MDB_YAML_DATA_FILE, "w") as outfile:
         yaml.dump(models, outfile, default_flow_style=False)
 
 
@@ -310,7 +313,8 @@ def generate_database(options):
             options.download_streams,
             options.modeldb_sync,
             options.modeldb_cache,
-            options.keep_download)
+            options.keep_download,
+        )
         result = sorted(result, key=lambda k: int(k.name))
         models.extend(result)
 
@@ -319,88 +323,119 @@ def generate_database(options):
             options.max_download_count,
             options.download_streams,
             options.bbp_cache,
-            options.keep_download)
+            options.keep_download,
+        )
         result = sorted(result, key=lambda k: k.name)
         models.extend(result)
 
     if not options.skip_stats and (options.download_modeldb or options.download_bbp):
-        failed = sum([1 for mod in models if mod.result['status'] == 1])
+        failed = sum([1 for mod in models if mod.result["status"] == 1])
         success = len(models) - failed
 
         result = {}
-        result['downloaded'] = success
-        result['failed'] = failed
-        result['models'] = models
+        result["downloaded"] = success
+        result["failed"] = failed
+        result["models"] = models
 
         write_yaml_report(result, NMODLDB_STATS_FILE)
-        logger.warn("DBGEN STATS : SUCCESS %d, FAILED %d, LOG FILE %s", success, failed, NMODLDB_STATS_FILE)
+        logger.warn(
+            "DBGEN STATS : SUCCESS %d, FAILED %d, LOG FILE %s",
+            success,
+            failed,
+            NMODLDB_STATS_FILE,
+        )
 
 
 def parse_args():
     parser = argparse.ArgumentParser(
-                        description='NMODL database generator from ModelDB')
-    parser.add_argument('--download-modeldb',
-                        dest='download_modeldb',
-                        action='store_true',
-                        default=False,
-                        help='Download models from ModelDB (False).')
-    parser.add_argument('--download-bbp',
-                        dest='download_bbp',
-                        action='store_true',
-                        default=False,
-                        help='Download models from BBP Neurodamus (False).')
-    parser.add_argument('--max-models-update-count',
-                        dest='max_update_count',
-                        type=int,
-                        default=0,
-                        help='Maximum number of models to update (0).')
-    parser.add_argument('--use-modeldb-cache',
-                        dest='modeldb_cache',
-                        action='store_true',
-                        default=False,
-                        help='Use existing zip files from ModelDB if available (False).')
-    parser.add_argument('--use-bbp-cache',
-                        dest='bbp_cache',
-                        action='store_true',
-                        default=False,
-                        help='Use exisiting BBP models if available (False).')
-    parser.add_argument('--sync-modeldb',
-                        dest='modeldb_sync',
-                        action='store_true',
-                        default=False,
-                        help='Synchronize models information from ModelDB (False).')
-    parser.add_argument('--keep-downloads',
-                        dest='keep_download',
-                        action='store_true',
-                        default=False,
-                        help='Keep zip/git downloads from ModelDB/BBP (False).')
-    parser.add_argument('--clean-db',
-                        dest='clean_db',
-                        action='store_true',
-                        default=False,
-                        help='Remove exisiting NMODL database (False).')
-    parser.add_argument('--clean-cache',
-                        dest='clean_cache',
-                        action='store_true',
-                        default=False,
-                        help='Remove exisiting cached files (False).')
-    parser.add_argument('--download-streams',
-                        dest='download_streams',
-                        type=int,
-                        default=8,
-                        help='Number of parallel download streams to use (8).')
-    parser.add_argument('--max-models-download-count',
-                        dest='max_download_count',
-                        type=int,
-                        default=25,
-                        help='Maximum number of models to download from ModelDB or BBP (25).')
-    parser.add_argument('--skip-stats',
-                        dest='skip_stats',
-                        action='store_true',
-                        default=False,
-                        help='Do not write models/stats.yaml file (False).')
+        description="NMODL database generator from ModelDB"
+    )
+    parser.add_argument(
+        "--download-modeldb",
+        dest="download_modeldb",
+        action="store_true",
+        default=False,
+        help="Download models from ModelDB (False).",
+    )
+    parser.add_argument(
+        "--download-bbp",
+        dest="download_bbp",
+        action="store_true",
+        default=False,
+        help="Download models from BBP Neurodamus (False).",
+    )
+    parser.add_argument(
+        "--max-models-update-count",
+        dest="max_update_count",
+        type=int,
+        default=0,
+        help="Maximum number of models to update (0).",
+    )
+    parser.add_argument(
+        "--use-modeldb-cache",
+        dest="modeldb_cache",
+        action="store_true",
+        default=False,
+        help="Use existing zip files from ModelDB if available (False).",
+    )
+    parser.add_argument(
+        "--use-bbp-cache",
+        dest="bbp_cache",
+        action="store_true",
+        default=False,
+        help="Use exisiting BBP models if available (False).",
+    )
+    parser.add_argument(
+        "--sync-modeldb",
+        dest="modeldb_sync",
+        action="store_true",
+        default=False,
+        help="Synchronize models information from ModelDB (False).",
+    )
+    parser.add_argument(
+        "--keep-downloads",
+        dest="keep_download",
+        action="store_true",
+        default=False,
+        help="Keep zip/git downloads from ModelDB/BBP (False).",
+    )
+    parser.add_argument(
+        "--clean-db",
+        dest="clean_db",
+        action="store_true",
+        default=False,
+        help="Remove exisiting NMODL database (False).",
+    )
+    parser.add_argument(
+        "--clean-cache",
+        dest="clean_cache",
+        action="store_true",
+        default=False,
+        help="Remove exisiting cached files (False).",
+    )
+    parser.add_argument(
+        "--download-streams",
+        dest="download_streams",
+        type=int,
+        default=8,
+        help="Number of parallel download streams to use (8).",
+    )
+    parser.add_argument(
+        "--max-models-download-count",
+        dest="max_download_count",
+        type=int,
+        default=25,
+        help="Maximum number of models to download from ModelDB or BBP (25).",
+    )
+    parser.add_argument(
+        "--skip-stats",
+        dest="skip_stats",
+        action="store_true",
+        default=False,
+        help="Do not write models/stats.yaml file (False).",
+    )
     return parser.parse_args()
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     generate_database(parse_args())
